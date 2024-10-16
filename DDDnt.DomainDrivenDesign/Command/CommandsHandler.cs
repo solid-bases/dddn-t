@@ -5,7 +5,7 @@ using DDDnt.DomainDrivenDesign.Persistency;
 
 namespace DDDnt.DomainDrivenDesign.Command;
 
-public abstract class CommandsHandler
+public abstract class CommandsHandler : ICommandHandler
 {
     public abstract CommandsDelegates Delegates { get; }
     public abstract RepositoryCollection RepositoriesTypes { get; }
@@ -33,7 +33,7 @@ public abstract class CommandsHandler
         return _repositories.FirstOrDefault(r => r is T);
     }
 
-    public void Handle(ICommand command)
+    public void Handle<TCommand>(TCommand command) where TCommand : ICommand
     {
         _logger.LogInformation("Command received: {command}", command);
         if (Delegates.TryGetValue(command.GetType(), out var execute))
