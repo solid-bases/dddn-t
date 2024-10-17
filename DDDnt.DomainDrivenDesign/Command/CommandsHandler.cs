@@ -28,9 +28,9 @@ public abstract class CommandsHandler : ICommandHandler
         }
     }
 
-    public IRepository? GetRepository<T>() where T : IRepository
+    public T? GetRepository<T>() where T : IRepository
     {
-        return _repositories.FirstOrDefault(r => r is T);
+        return (T?)_repositories.FirstOrDefault(r => r is T);
     }
 
     public void Handle<TCommand>(TCommand command) where TCommand : ICommand
