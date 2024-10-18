@@ -19,7 +19,7 @@ public abstract class AggregateRoot<TId>
 
     protected ICollection<IDomainEvent> _uncommittedEvents = [];
 
-    public void ApplyEvent(IDomainEvent @event)
+    protected void ApplyEvent(IDomainEvent @event)
     {
         DomainEventsCollection.TryGetValue(@event.GetType(), out var apply);
         if (apply is null)
@@ -29,7 +29,7 @@ public abstract class AggregateRoot<TId>
         apply.Invoke(@event);
     }
 
-    internal virtual void RaiseEvent(IDomainEvent @event)
+    public virtual void RaiseEvent(IDomainEvent @event)
     {
         _uncommittedEvents.Add(@event);
         ApplyEvent(@event);
