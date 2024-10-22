@@ -1,8 +1,8 @@
+using DDDnt.DomainDrivenDesign.Command;
+
 using Microsoft.Extensions.Logging;
 
 using Moq;
-
-using DDDnt.DomainDrivenDesign.Command;
 
 namespace DDDnt.DomainDrivenDesign.Specifications.CommandsHandler.Components;
 

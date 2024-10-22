@@ -1,10 +1,10 @@
 using System.Reflection;
 
-using Newtonsoft.Json.Linq;
-
 using DDDnt.DomainDrivenDesign.Aggregate;
 using DDDnt.DomainDrivenDesign.Storage;
 using DDDnt.DomainDrivenDesign.ValueObjects;
+
+using Newtonsoft.Json.Linq;
 
 namespace DDDnt.DomainDrivenDesign.Persistency;
 

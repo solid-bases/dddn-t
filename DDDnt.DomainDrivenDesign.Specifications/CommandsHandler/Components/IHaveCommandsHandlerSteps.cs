@@ -1,10 +1,10 @@
 using System.Linq.Expressions;
 
+using DDDnt.DomainDrivenDesign.Storage;
+
 using Microsoft.Extensions.Logging;
 
 using Moq;
-
-using DDDnt.DomainDrivenDesign.Storage;
 
 namespace DDDnt.DomainDrivenDesign.Specifications.CommandsHandler.Components;
 
@@ -102,5 +102,10 @@ public interface IHaveCommandsHandlerSteps : IHaveStepsWithContext<CommandsHandl
     {
         Context.ServiceProviderMock!.Verify(s => s.GetService(typeof(ITestPublisher)), Times.Once());
         Context.CommandsHandler!.GetPublisher<ITestPublisher>().Should().BeOfType<TestPublisher>();
+    }
+
+    void Then_TestCommandHandler_contains_two_delegates()
+    {
+        Context.CommandsHandler!.Delegates.Count.Should().Be(2);
     }
 }

@@ -1,9 +1,9 @@
 using System.Linq.Expressions;
 
-using Moq;
-
 using DDDnt.DomainDrivenDesign.Command;
 using DDDnt.DomainDrivenDesign.Sender;
+
+using Moq;
 
 namespace DDDnt.DomainDrivenDesign.Specifications.CommandsHandler;
 

@@ -1,6 +1,6 @@
-using Microsoft.Extensions.Logging;
-
 using DDDnt.DomainDrivenDesign.Specifications.CommandsHandler.Components;
+
+using Microsoft.Extensions.Logging;
 
 namespace DDDnt.DomainDrivenDesign.Specifications.CommandsHandler;
 
@@ -37,13 +37,14 @@ public class CommandsHandlerSpec : SpecificationsWithSteps<IHaveCommandsHandlerS
     }
 
     [Fact]
-    public void Handle_should_log_exception()
+    public void Handle_should_log_exception_when_delegate_throw_exception()
     {
         _steps.Given_the_TestCommandWithException();
         _steps.Given_the_log_mocked(LogLevel.Information);
         _steps.Given_the_log_mocked(LogLevel.Error);
         _steps.Given_an_execution_exception();
         _steps.When_Handle_is_called();
+        _steps.Then_TestCommandHandler_contains_two_delegates();
         _steps.Then_command_received_should_be_logged(LogLevel.Error);
     }
 

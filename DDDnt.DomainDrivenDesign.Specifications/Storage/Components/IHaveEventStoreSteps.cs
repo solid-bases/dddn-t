@@ -1,11 +1,11 @@
 using System.IO.Abstractions.TestingHelpers;
 
-using Newtonsoft.Json;
-
 using DDDnt.DomainDrivenDesign.Aggregate;
 using DDDnt.DomainDrivenDesign.Persistency;
 using DDDnt.DomainDrivenDesign.Specifications.Persistency;
 using DDDnt.DomainDrivenDesign.Specifications.Persistency.Components;
+
+using Newtonsoft.Json;
 
 namespace DDDnt.DomainDrivenDesign.Specifications.Storage.Components;
 

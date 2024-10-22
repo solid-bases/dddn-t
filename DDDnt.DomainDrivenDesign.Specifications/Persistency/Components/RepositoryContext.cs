@@ -1,10 +1,10 @@
 
+using DDDnt.DomainDrivenDesign.Persistency;
+using DDDnt.DomainDrivenDesign.Storage;
+
 using Moq;
 
 using Newtonsoft.Json.Linq;
-
-using DDDnt.DomainDrivenDesign.Persistency;
-using DDDnt.DomainDrivenDesign.Storage;
 
 namespace DDDnt.DomainDrivenDesign.Specifications.Persistency.Components;
 

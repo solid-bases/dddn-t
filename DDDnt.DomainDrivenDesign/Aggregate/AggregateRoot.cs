@@ -1,7 +1,7 @@
-using Newtonsoft.Json;
-
 using DDDnt.DomainDrivenDesign.Exceptions;
 using DDDnt.DomainDrivenDesign.ValueObjects;
+
+using Newtonsoft.Json;
 
 namespace DDDnt.DomainDrivenDesign.Aggregate;
 

@@ -1,9 +1,9 @@
 using System.IO.Abstractions.TestingHelpers;
 
-using Newtonsoft.Json.Linq;
-
 using DDDnt.DomainDrivenDesign.Specifications.Persistency.Components;
 using DDDnt.DomainDrivenDesign.Storage;
+
+using Newtonsoft.Json.Linq;
 namespace DDDnt.DomainDrivenDesign.Specifications.Storage.Components;
 
 public class EventStoreContext
