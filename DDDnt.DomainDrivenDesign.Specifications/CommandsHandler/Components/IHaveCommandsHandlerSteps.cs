@@ -84,6 +84,9 @@ public interface IHaveCommandsHandlerSteps : IHaveStepsWithContext<CommandsHandl
         Context.ServiceProviderMock!
             .Setup(s => s.GetService(typeof(IAnotherTestRepository)))
             .Returns(new AnotherTestRepository(new Mock<IEventStore>().Object));
+        Context.ServiceProviderMock!
+            .Setup(s => s.GetService(typeof(ITestPublisher)))
+            .Returns(new TestPublisher());
     }
 
     void Then_the_repositories_are_injected()
@@ -95,5 +98,9 @@ public interface IHaveCommandsHandlerSteps : IHaveStepsWithContext<CommandsHandl
         Context.CommandsHandler!.GetRepository<IAnotherTestRepository>().Should().BeOfType<AnotherTestRepository>();
     }
 
+    void Then_the_publishers_are_injected()
+    {
+        Context.ServiceProviderMock!.Verify(s => s.GetService(typeof(ITestPublisher)), Times.Once());
+        Context.CommandsHandler!.GetPublisher<ITestPublisher>().Should().BeOfType<TestPublisher>();
+    }
 }
-

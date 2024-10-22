@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using DDDnt.DomainDrivenDesign.Command;
 using DDDnt.DomainDrivenDesign.Persistency;
 using DDDnt.DomainDrivenDesign.Storage;
+using DDDnt.DomainDrivenDesign.EventPublisher;
 
 namespace DDDnt.DomainDrivenDesign.Specifications.CommandsHandler.Components;
 
@@ -13,11 +14,12 @@ public class TestCommandsHandler : Command.CommandsHandler
         typeof(IAnotherTestRepository)
     ];
 
-    public override CommandsDelegates Delegates { get; }
+    public override CommandsDelegates Delegates => new() { { typeof(TestCommand), command => Execute((TestCommand)command) } };
+
+    public override PublisherCollection? PublishersTypes => [typeof(ITestPublisher)];
 
     public TestCommandsHandler(ILogger<TestCommandsHandler> logger, IServiceProvider serviceProvider) : base(logger, serviceProvider)
     {
-        Delegates = new() { { typeof(TestCommand), command => Execute((TestCommand)command) } };
     }
 
     public bool ExecuteHasBeenCalled { get; private set; } = false;

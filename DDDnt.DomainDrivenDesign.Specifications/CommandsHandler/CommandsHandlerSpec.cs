@@ -62,5 +62,12 @@ public class CommandsHandlerSpec : SpecificationsWithSteps<IHaveCommandsHandlerS
     {
         _steps.Then_the_repositories_are_injected();
     }
+
+    [Fact]
+    public void Should_allow_to_inject_publishers()
+    {
+        _steps.Then_the_publishers_are_injected();
+    }
+
 }
 
