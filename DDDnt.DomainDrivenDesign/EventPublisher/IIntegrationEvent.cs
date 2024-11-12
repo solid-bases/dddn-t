@@ -1,6 +1,8 @@
+using DDDnt.DomainDrivenDesign.Aggregate;
+
 namespace DDDnt.DomainDrivenDesign.EventPublisher;
 
-public interface IIntegrationEvent
+public interface IIntegrationEvent : IAggregateEvent
 {
 
 }

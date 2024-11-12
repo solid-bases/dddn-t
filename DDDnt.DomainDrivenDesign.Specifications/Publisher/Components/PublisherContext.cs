@@ -1,4 +1,4 @@
-using DDDnt.DomainDrivenDesign.EventPublisher;
+using DDDnt.DomainDrivenDesign.Aggregate;
 
 using Microsoft.Extensions.Logging;
 
@@ -10,7 +10,7 @@ public class PublisherContext
 {
     public Mock<ILogger<TestPublisher>>? LoggerMock { get; internal set; }
 
-    public IIntegrationEvent? IntegrationEvent { get; internal set; }
+    public IAggregateEvent? AggregateEvent { get; internal set; }
 
     internal TestPublisher? Publisher { get; set; }
 }

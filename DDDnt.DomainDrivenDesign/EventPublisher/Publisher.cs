@@ -1,4 +1,5 @@
 using Microsoft.Extensions.Logging;
+using DDDnt.DomainDrivenDesign.Aggregate;
 
 namespace DDDnt.DomainDrivenDesign.EventPublisher;
 
@@ -7,7 +8,7 @@ public abstract class Publisher(ILogger<Publisher> logger) : IPublisher
     private ILogger<Publisher> _logger { get; } = logger;
     public required abstract EventsDelegates Delegates { get; set; }
 
-    public virtual void Publish<TEvent>(TEvent @event) where TEvent : IIntegrationEvent
+    public virtual void Publish<TEvent>(TEvent @event) where TEvent : IAggregateEvent
     {
         _logger.LogInformation("Event received: {event}", @event);
         if (Delegates.TryGetValue(@event.GetType(), out var execute))
@@ -20,7 +21,7 @@ public abstract class Publisher(ILogger<Publisher> logger) : IPublisher
         }
     }
 
-    private void TryExecute(IIntegrationEvent @event, ExecuteDelegate execute)
+    private void TryExecute(IAggregateEvent @event, ExecuteDelegate execute)
     {
         try
         {
