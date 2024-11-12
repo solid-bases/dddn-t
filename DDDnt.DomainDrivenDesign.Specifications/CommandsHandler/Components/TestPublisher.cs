@@ -9,7 +9,7 @@ internal class TestPublisher : ITestPublisher
     {
     }
 
-    public void Publish<TEvent>(TEvent @event) where TEvent : IAggregateEvent
+    public void Publish<TEvent>(TEvent @event) where TEvent : IEvent
     {
         throw new NotImplementedException();
     }

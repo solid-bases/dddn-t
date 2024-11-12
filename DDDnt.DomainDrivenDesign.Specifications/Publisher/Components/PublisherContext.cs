@@ -10,7 +10,7 @@ public class PublisherContext
 {
     public Mock<ILogger<TestPublisher>>? LoggerMock { get; internal set; }
 
-    public IAggregateEvent? AggregateEvent { get; internal set; }
+    public IEvent? AggregateEvent { get; internal set; }
 
     internal TestPublisher? Publisher { get; set; }
 }

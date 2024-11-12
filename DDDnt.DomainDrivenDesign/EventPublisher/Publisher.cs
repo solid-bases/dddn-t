@@ -9,7 +9,7 @@ public abstract class Publisher(ILogger<Publisher> logger) : IPublisher
     private ILogger<Publisher> Logger { get; } = logger;
     public required abstract EventsDelegates Delegates { get; set; }
 
-    public virtual void Publish<TEvent>(TEvent @event) where TEvent : IAggregateEvent
+    public virtual void Publish<TEvent>(TEvent @event) where TEvent : IEvent
     {
         Logger.LogInformation("Event received: {event}", @event);
         if (Delegates.TryGetValue(@event.GetType(), out var execute))
@@ -22,7 +22,7 @@ public abstract class Publisher(ILogger<Publisher> logger) : IPublisher
         }
     }
 
-    private void TryExecute(IAggregateEvent @event, ExecuteDelegate execute)
+    private void TryExecute(IEvent @event, ExecuteDelegate execute)
     {
         try
         {
