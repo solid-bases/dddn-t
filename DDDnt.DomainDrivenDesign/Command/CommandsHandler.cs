@@ -8,9 +8,9 @@ namespace DDDnt.DomainDrivenDesign.Command;
 
 public abstract class CommandsHandler : ICommandHandler
 {
-    public abstract required CommandsDelegates Delegates { get; set; }
+    public abstract required CommandsDelegates Delegates { get; init; }
     public abstract RepositoryCollection RepositoriesTypes { get; }
-    public virtual PublisherCollection? PublishersTypes { get; }
+    public virtual PublisherCollection? PublishersTypes { get; } = [];
 
     private ILogger<CommandsHandler> _logger { get; }
 

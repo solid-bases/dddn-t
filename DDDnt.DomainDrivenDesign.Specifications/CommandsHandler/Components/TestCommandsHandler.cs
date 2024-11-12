@@ -11,7 +11,7 @@ namespace DDDnt.DomainDrivenDesign.Specifications.CommandsHandler.Components;
 
 public class TestCommandsHandler : Command.CommandsHandler
 {
-    public override required CommandsDelegates Delegates { get; set; }
+    public override required CommandsDelegates Delegates { get; init; }
 
     public override RepositoryCollection RepositoriesTypes => [
         typeof(ITestRepository),
