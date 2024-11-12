@@ -42,7 +42,7 @@ public class PublisherSpec : SpecificationsWithSteps<IHavePublisherSteps, Publis
         _steps.Given_the_log_mocked(LogLevel.Error);
         _steps.Given_an_execution_exception();
         _steps.When_Publish_is_called();
-        _steps.Then_Publisher_contains_two_delegates();
+        _steps.Then_Publisher_contains_three_delegates();
         _steps.Then_integration_event_received_should_be_logged(LogLevel.Error);
     }
 
@@ -54,6 +54,14 @@ public class PublisherSpec : SpecificationsWithSteps<IHavePublisherSteps, Publis
         _steps.Given_the_log_mocked(LogLevel.Error);
         _steps.When_Publish_is_called();
         _steps.Then_integration_event_received_should_be_logged(LogLevel.Error);
+    }
+
+    [Fact]
+    public void Publish_should_call_execute_method()
+    {
+        _steps.Given_the_TestDomainEvent();
+        _steps.When_Publish_is_called();
+        _steps.Then_Execute_is_called();
     }
 
     // [Fact]

@@ -1,6 +1,8 @@
 using System.Diagnostics.CodeAnalysis;
 
+using DDDnt.DomainDrivenDesign.Aggregate;
 using DDDnt.DomainDrivenDesign.EventPublisher;
+using DDDnt.DomainDrivenDesign.ValueObjects;
 
 using Microsoft.Extensions.Logging;
 
@@ -15,23 +17,35 @@ public class TestPublisher : PB.Publisher
     [SetsRequiredMembers]
     public TestPublisher(ILogger<TestPublisher> logger) : base(logger)
     {
-        Delegates = new() { { typeof(TestEvent), @event => Execute((TestEvent)@event) } };
+        Delegates = new() {
+            { typeof(TestIntegrationEvent), @event => Execute((TestIntegrationEvent)@event) },
+            { typeof(TestDomainEvent), @event => Execute((TestDomainEvent)@event) }
+            };
     }
 
 
     public bool ExecuteHasBeenCalled { get; private set; } = false;
 
-    public void Execute(TestEvent _)
+    public void Execute(TestIntegrationEvent _)
+    {
+        ExecuteHasBeenCalled = true;
+    }
+
+    public void Execute(TestDomainEvent _)
     {
         ExecuteHasBeenCalled = true;
     }
 }
 
-public record TestEventNoHandler : IntegrationEvent
+public record TestEventNoHandler : IIntegrationEvent
 {
 }
 
-public record TestEvent : IntegrationEvent
+public record TestIntegrationEvent : IIntegrationEvent
 {
 }
 
+public record TestDomainEvent(CorrelationId CorrelationId, User User) : IDomainEvent
+{
+    public string EventName => "TestDomainEvent";
+}

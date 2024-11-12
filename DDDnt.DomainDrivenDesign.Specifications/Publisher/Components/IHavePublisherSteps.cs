@@ -41,7 +41,7 @@ public interface IHavePublisherSteps : IHaveStepsWithContext<PublisherContext>
 
     void Given_an_execution_exception()
     {
-        Context.Publisher!.Delegates.Add(typeof(TestPublisherWithException), command => throw new NotImplementedException());
+        Context.Publisher!.Delegates.Add(typeof(TestPublisherWithException), @event => throw new NotImplementedException());
     }
 
     void Then_Execute_is_called()
@@ -58,26 +58,31 @@ public interface IHavePublisherSteps : IHaveStepsWithContext<PublisherContext>
 
     void When_Publish_is_called()
     {
-        Context.Publisher!.Publish(Context.IntegrationEvent!);
+        Context.Publisher!.Publish(Context.AggregateEvent!);
     }
 
     void Given_the_TestEvent()
     {
-        Context.IntegrationEvent = new TestEvent();
+        Context.AggregateEvent = new TestIntegrationEvent();
     }
 
     void Given_the_TestPublisherWithException()
     {
-        Context.IntegrationEvent = new TestPublisherWithException();
+        Context.AggregateEvent = new TestPublisherWithException();
     }
 
     void Given_the_TestPublisherNoHandler()
     {
-        Context.IntegrationEvent = new TestPublisherWithException();
+        Context.AggregateEvent = new TestPublisherWithException();
     }
 
-    void Then_Publisher_contains_two_delegates()
+    void Given_the_TestDomainEvent()
     {
-        Context.Publisher!.Delegates.Count.Should().Be(2);
+        Context.AggregateEvent = new TestDomainEvent(new(Guid.NewGuid()), new(""));
+    }
+
+    void Then_Publisher_contains_three_delegates()
+    {
+        Context.Publisher!.Delegates.Count.Should().Be(3);
     }
 }

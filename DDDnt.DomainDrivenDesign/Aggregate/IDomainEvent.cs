@@ -2,7 +2,7 @@ using DDDnt.DomainDrivenDesign.ValueObjects;
 
 namespace DDDnt.DomainDrivenDesign.Aggregate;
 
-public interface IDomainEvent
+public interface IDomainEvent : IEvent
 {
     /// <summary>
     /// This should be manually implemented in each domain event class and
