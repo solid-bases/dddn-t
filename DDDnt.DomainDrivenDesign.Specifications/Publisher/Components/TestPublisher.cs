@@ -17,7 +17,7 @@ public class TestPublisher : PB.Publisher
     [SetsRequiredMembers]
     public TestPublisher(ILogger<TestPublisher> logger) : base(logger)
     {
-        Delegates = new() { 
+        Delegates = new() {
             { typeof(TestIntegrationEvent), @event => Execute((TestIntegrationEvent)@event) },
             { typeof(TestDomainEvent), @event => Execute((TestDomainEvent)@event) }
             };

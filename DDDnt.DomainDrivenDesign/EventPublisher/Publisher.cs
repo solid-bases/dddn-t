@@ -1,23 +1,24 @@
-using Microsoft.Extensions.Logging;
 using DDDnt.DomainDrivenDesign.Aggregate;
+
+using Microsoft.Extensions.Logging;
 
 namespace DDDnt.DomainDrivenDesign.EventPublisher;
 
 public abstract class Publisher(ILogger<Publisher> logger) : IPublisher
 {
-    private ILogger<Publisher> _logger { get; } = logger;
+    private ILogger<Publisher> Logger { get; } = logger;
     public required abstract EventsDelegates Delegates { get; set; }
 
     public virtual void Publish<TEvent>(TEvent @event) where TEvent : IAggregateEvent
     {
-        _logger.LogInformation("Event received: {event}", @event);
+        Logger.LogInformation("Event received: {event}", @event);
         if (Delegates.TryGetValue(@event.GetType(), out var execute))
         {
             TryExecute(@event, execute);
         }
         else
         {
-            _logger.LogError("No handler found for event: {@event}", @event);
+            Logger.LogError("No handler found for event: {@event}", @event);
         }
     }
 
@@ -29,7 +30,7 @@ public abstract class Publisher(ILogger<Publisher> logger) : IPublisher
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error executing event: {@event}", @event);
+            Logger.LogError(ex, "Error executing event: {@event}", @event);
         }
 
     }

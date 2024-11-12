@@ -17,7 +17,7 @@ public class TestAggregateRoot : Aggregate.AggregateRoot<AggregateId>
 
     public bool ApplyTestEventCalled { get; private set; } = false;
 
-    internal void ApplyTestEvent(TestEvent @event)
+    internal void ApplyTestEvent(TestEvent _)
     {
         ApplyTestEventCalled = true;
     }

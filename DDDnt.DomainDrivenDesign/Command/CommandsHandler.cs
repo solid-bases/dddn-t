@@ -12,14 +12,14 @@ public abstract class CommandsHandler : ICommandHandler
     public abstract RepositoryCollection RepositoriesTypes { get; }
     public virtual PublisherCollection? PublishersTypes { get; } = [];
 
-    private ILogger<CommandsHandler> _logger { get; }
+    private ILogger<CommandsHandler> Logger { get; }
 
     private readonly ICollection<IRepository> _repositories = [];
     private readonly ICollection<IPublisher> _publishers = [];
 
     protected CommandsHandler(ILogger<CommandsHandler> logger, IServiceProvider serviceProvider)
     {
-        _logger = logger;
+        Logger = logger;
 
         InjectRepositories(serviceProvider);
         InjectPublishers(serviceProvider);
@@ -53,14 +53,14 @@ public abstract class CommandsHandler : ICommandHandler
 
     public void Handle<TCommand>(TCommand command) where TCommand : ICommand
     {
-        _logger.LogInformation("Command received: {command}", command);
+        Logger.LogInformation("Command received: {command}", command);
         if (Delegates.TryGetValue(command.GetType(), out var execute))
         {
             TryExecute(command, execute);
         }
         else
         {
-            _logger.LogError("No handler found for command: {command}", command);
+            Logger.LogError("No handler found for command: {command}", command);
         }
     }
 
@@ -72,7 +72,7 @@ public abstract class CommandsHandler : ICommandHandler
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error executing command: {command}", command);
+            Logger.LogError(ex, "Error executing command: {command}", command);
         }
 
     }
