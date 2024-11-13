@@ -7,7 +7,7 @@ namespace DDDnt.DomainDrivenDesign.EventPublisher;
 public abstract class Publisher(ILogger<Publisher> logger) : IPublisher
 {
     private ILogger<Publisher> Logger { get; } = logger;
-    public required abstract EventsDelegates Delegates { get; set; }
+    public required abstract EventsDelegates Delegates { get; init; }
 
     public virtual void Publish<TEvent>(TEvent @event) where TEvent : IEvent
     {

@@ -12,7 +12,7 @@ namespace DDDnt.DomainDrivenDesign.Specifications.Publisher.Components;
 
 public class TestPublisher : PB.Publisher
 {
-    public override required EventsDelegates Delegates { get; set; }
+    public override required EventsDelegates Delegates { get; init; }
 
     [SetsRequiredMembers]
     public TestPublisher(ILogger<TestPublisher> logger) : base(logger)
