@@ -11,7 +11,7 @@ public interface IHaveEventRepositorySteps : IHaveStepsWithContext<EventReposito
 {
     void Given_the_store_mock()
     {
-        Context.StoreMock = new Mock<IEventStore>();
+        Context.StoreMock = new Mock<IEventStore<TestAggregate, AggregateId>>();
     }
 
     void Given_the_TestAggregate_events()
@@ -21,7 +21,7 @@ public interface IHaveEventRepositorySteps : IHaveStepsWithContext<EventReposito
             new JObject { { "EventName", typeof(TestUpdateEvent).FullName }, { "Id", "1" }, { "Description", "Test" }, { "OnlyUpdate", 1 } }
         );
         Context.StoreMock!
-            .Setup(s => s.ReadAggregate<TestAggregate>(It.IsAny<CorrelationId>(), It.IsAny<AggregateId>(), It.IsAny<CancellationToken>()))
+            .Setup(s => s.ReadAggregate(It.IsAny<CorrelationId>(), It.IsAny<AggregateId>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(Context.Events);
     }
 
@@ -32,7 +32,7 @@ public interface IHaveEventRepositorySteps : IHaveStepsWithContext<EventReposito
 
     async Task When_get_by_aggregate_id_is_called(string id)
     {
-        Context.Aggregate = await Context.Repository!.GetByAggregateId<TestAggregate>(new(), new(id));
+        Context.Aggregate = await Context.Repository!.GetByAggregateId(new(), new(id));
     }
 
     void Then_the_aggregate_is_initialized()

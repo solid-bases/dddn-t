@@ -45,7 +45,7 @@ public class TestAggregate : Aggregate.AggregateRoot<AggregateId>
         DomainEventsCollection = new() {
         { typeof(TestCreateEvent), @event => Apply((TestCreateEvent)@event) },
         { typeof(TestUpdateEvent), @event => Apply((TestUpdateEvent)@event) },
-        { typeof(Snapshot<TestAggregate>), @event => Apply((Snapshot<TestAggregate>)@event) },
+        { typeof(Snapshot<TestAggregate, AggregateId>), @event => Apply((Snapshot<TestAggregate, AggregateId>)@event) },
     };
     }
 
@@ -55,7 +55,7 @@ public class TestAggregate : Aggregate.AggregateRoot<AggregateId>
     public override AggregateId? Id { get; set; }
 
 
-    private void Apply(Snapshot<TestAggregate> @event)
+    private void Apply(Snapshot<TestAggregate, AggregateId> @event)
     {
         Id = @event.AggregateData.Id;
         Description = @event.AggregateData.Description;
@@ -81,6 +81,6 @@ public class TestAggregate : Aggregate.AggregateRoot<AggregateId>
 
 public record TestDescription(string Value);
 
-public class TestRepository(IEventStore store) : EventRepository(store)
+public class TestRepository(IEventStore<TestAggregate, AggregateId> store) : EventRepository<TestAggregate, AggregateId>(store)
 {
 }

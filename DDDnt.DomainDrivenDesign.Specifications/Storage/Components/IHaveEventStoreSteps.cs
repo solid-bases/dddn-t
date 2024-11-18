@@ -4,6 +4,7 @@ using DDDnt.DomainDrivenDesign.Aggregate;
 using DDDnt.DomainDrivenDesign.Persistency;
 using DDDnt.DomainDrivenDesign.Specifications.Persistency;
 using DDDnt.DomainDrivenDesign.Specifications.Persistency.Components;
+using DDDnt.DomainDrivenDesign.ValueObjects;
 
 using Newtonsoft.Json;
 
@@ -29,7 +30,7 @@ public interface IHaveEventStoreSteps : IHaveStepsWithContext<EventStoreContext>
 
     async Task When_ReadAggregate_is_called(string aggregateId)
     {
-        Context.Events = await Context.Store!.ReadAggregate<TestAggregate>(new(), new(aggregateId));
+        Context.Events = await Context.Store!.ReadAggregate(new(), new(aggregateId));
     }
 
     void Then_the_events_list_is_returned()
@@ -90,7 +91,7 @@ public interface IHaveEventStoreSteps : IHaveStepsWithContext<EventStoreContext>
         IList<IDomainEvent> events = [
             new TestCreateEvent("WithSnapshot", "Test"),
             new TestUpdateEvent("WithSnapshot", "Test", 1),
-            new Snapshot<TestAggregate>(new(), new("No User"), new TestAggregate { Id = new("WithSnapshot"), Description = new("Test-snapshot") }),
+            new Snapshot<TestAggregate, AggregateId>(new(), new("No User"), new TestAggregate { Id = new("WithSnapshot"), Description = new("Test-snapshot") }),
             new TestUpdateEvent("WithSnapshot", null, 2),
         ];
         Context.FileSystemMock = new MockFileSystem(new Dictionary<string, MockFileData> {

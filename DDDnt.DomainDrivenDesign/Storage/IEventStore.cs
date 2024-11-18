@@ -5,10 +5,10 @@ using Newtonsoft.Json.Linq;
 
 namespace DDDnt.DomainDrivenDesign.Storage;
 
-public interface IEventStore
+public interface IEventStore<T, TId> where TId : AggregateId where T : AggregateRoot<TId>
 {
-    Task<JArray> ReadAggregate<T>(CorrelationId correlationId, AggregateId aggregateId, CancellationToken cancellationToken = default) where T : AggregateRoot<AggregateId>;
-    Task Commit<T>(CorrelationId correlationId, T aggregate, CancellationToken cancellationToken = default) where T : AggregateRoot<AggregateId>;
-    Task Snapshot<T>(CorrelationId correlationId, T aggregate, CancellationToken cancellationToken = default) where T : AggregateRoot<AggregateId>;
+    Task<JArray> ReadAggregate(CorrelationId correlationId, TId aggregateId, CancellationToken cancellationToken = default);
+    Task Commit(CorrelationId correlationId, T aggregate, CancellationToken cancellationToken = default);
+    Task Snapshot(CorrelationId correlationId, T aggregate, CancellationToken cancellationToken = default);
 
 }

@@ -1,6 +1,8 @@
 using System.Linq.Expressions;
 
+using DDDnt.DomainDrivenDesign.Specifications.Persistency.Components;
 using DDDnt.DomainDrivenDesign.Storage;
+using DDDnt.DomainDrivenDesign.ValueObjects;
 
 using Microsoft.Extensions.Logging;
 
@@ -80,10 +82,10 @@ public interface IHaveCommandsHandlerSteps : IHaveStepsWithContext<CommandsHandl
     {
         Context.ServiceProviderMock!
             .Setup(s => s.GetService(typeof(ITestRepository)))
-            .Returns(new TestRepository(new Mock<IEventStore>().Object));
+            .Returns(new TestRepository(new Mock<IEventStore<TestAggregate, AggregateId>>().Object));
         Context.ServiceProviderMock!
             .Setup(s => s.GetService(typeof(IAnotherTestRepository)))
-            .Returns(new AnotherTestRepository(new Mock<IEventStore>().Object));
+            .Returns(new AnotherTestRepository(new Mock<IEventStore<TestAggregate, AggregateId>>().Object));
         Context.ServiceProviderMock!
             .Setup(s => s.GetService(typeof(ITestPublisher)))
             .Returns(new TestPublisher());

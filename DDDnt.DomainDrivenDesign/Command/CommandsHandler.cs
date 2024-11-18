@@ -29,7 +29,7 @@ public abstract class CommandsHandler : ICommandHandler
     {
         foreach (var key in RepositoriesTypes)
         {
-            _repositories.Add((IEventRepository)serviceProvider.GetRequiredService(key));
+            _repositories.Add((IRepository)serviceProvider.GetRequiredService(key));
         }
     }
 

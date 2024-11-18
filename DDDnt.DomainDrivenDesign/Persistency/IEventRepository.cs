@@ -3,9 +3,9 @@ using DDDnt.DomainDrivenDesign.ValueObjects;
 
 namespace DDDnt.DomainDrivenDesign.Persistency;
 
-public interface IEventRepository : IRepository
+public interface IEventRepository<T, TId> : IRepository where TId : AggregateId where T : AggregateRoot<TId>, new()
 {
-    Task<T> GetByAggregateId<T>(CorrelationId correlationId, AggregateId id, CancellationToken cancellationToken = default) where T : AggregateRoot<AggregateId>, new();
-    Task Commit<T>(CorrelationId correlationId, T aggregate, CancellationToken cancellationToken = default) where T : AggregateRoot<AggregateId>;
-    Task Snapshot<T>(CorrelationId correlationId, T aggregate, CancellationToken cancellationToken = default) where T : AggregateRoot<AggregateId>;
+    Task<T> GetByAggregateId(CorrelationId correlationId, TId id, CancellationToken cancellationToken = default);
+    Task Commit(CorrelationId correlationId, T aggregate, CancellationToken cancellationToken = default);
+    Task Snapshot(CorrelationId correlationId, T aggregate, CancellationToken cancellationToken = default);
 }

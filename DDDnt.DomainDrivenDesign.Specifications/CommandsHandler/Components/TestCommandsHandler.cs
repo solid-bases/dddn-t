@@ -3,7 +3,9 @@ using System.Diagnostics.CodeAnalysis;
 using DDDnt.DomainDrivenDesign.Command;
 using DDDnt.DomainDrivenDesign.EventPublisher;
 using DDDnt.DomainDrivenDesign.Persistency;
+using DDDnt.DomainDrivenDesign.Specifications.Persistency.Components;
 using DDDnt.DomainDrivenDesign.Storage;
+using DDDnt.DomainDrivenDesign.ValueObjects;
 
 using Microsoft.Extensions.Logging;
 
@@ -34,19 +36,19 @@ public class TestCommandsHandler : Command.CommandsHandler
     }
 }
 
-internal class AnotherTestRepository(IEventStore store) : EventRepository(store), IAnotherTestRepository
+internal class AnotherTestRepository(IEventStore<TestAggregate, AggregateId> store) : EventRepository<TestAggregate, AggregateId>(store), IAnotherTestRepository
 {
 }
 
-internal interface IAnotherTestRepository : IEventRepository
+internal interface IAnotherTestRepository : IEventRepository<TestAggregate, AggregateId>
 {
 }
 
-internal class TestRepository(IEventStore store) : EventRepository(store), ITestRepository
+internal class TestRepository(IEventStore<TestAggregate, AggregateId> store) : EventRepository<TestAggregate, AggregateId>(store), ITestRepository
 {
 }
 
-internal interface ITestRepository : IEventRepository
+internal interface ITestRepository : IEventRepository<TestAggregate, AggregateId>
 {
 }
 

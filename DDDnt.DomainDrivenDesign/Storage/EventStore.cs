@@ -9,11 +9,11 @@ using Newtonsoft.Json.Linq;
 
 namespace DDDnt.DomainDrivenDesign.Storage;
 
-public class EventStore(IFileSystem fileSystem) : IEventStore
+public class EventStore<T, TId>(IFileSystem fileSystem) : IEventStore<T, TId> where TId : AggregateId where T : AggregateRoot<TId>
 {
     protected IFileSystem _fileSystem = fileSystem;
 
-    public async Task<JArray> ReadAggregate<T>(CorrelationId correlationId, AggregateId aggregateId, CancellationToken cancellationToken = default) where T : AggregateRoot<AggregateId>
+    public async Task<JArray> ReadAggregate(CorrelationId correlationId, TId aggregateId, CancellationToken cancellationToken = default)
     {
         if (!_fileSystem.Directory.Exists(typeof(T).Name))
         {
@@ -22,13 +22,13 @@ public class EventStore(IFileSystem fileSystem) : IEventStore
 
         var filename = $"{typeof(T).Name}/{aggregateId.Value}.json";
         var fileLines = (await _fileSystem.File.ReadAllLinesAsync(filename, cancellationToken)).ToList();
-        fileLines = TailFileLinesFromLastSnapshot<T>(fileLines);
+        fileLines = TailFileLinesFromLastSnapshot(fileLines);
         var fileContent = string.Join(",", fileLines);
         var events = JArray.Parse($"[{fileContent}]");
         return events;
     }
 
-    private static List<string> TailFileLinesFromLastSnapshot<T>(List<string> fileLines) where T : AggregateRoot<AggregateId>
+    private static List<string> TailFileLinesFromLastSnapshot(List<string> fileLines)
     {
         var index = fileLines.FindLastIndex(l => l.Contains($"Snapshot-{typeof(T).Name}"));
         if (index >= 0)
@@ -40,9 +40,9 @@ public class EventStore(IFileSystem fileSystem) : IEventStore
     }
 
 
-    public async Task Commit<T>(CorrelationId correlationId, T aggregate, CancellationToken cancellationToken = default) where T : AggregateRoot<AggregateId>
+    public async Task Commit(CorrelationId correlationId, T aggregate, CancellationToken cancellationToken = default)
     {
-        CreateAggregateFolderIfNotExists<T>();
+        CreateAggregateFolderIfNotExists();
         var (fileContent, filename) = GenerateFileContentFromUncommittedEvents(aggregate);
 
         if (_fileSystem.File.Exists(filename))
@@ -55,7 +55,7 @@ public class EventStore(IFileSystem fileSystem) : IEventStore
         }
     }
 
-    private static (string[] fileContent, string filename) GenerateFileContentFromUncommittedEvents<T>(T aggregate) where T : AggregateRoot<AggregateId>
+    private static (string[] fileContent, string filename) GenerateFileContentFromUncommittedEvents(T aggregate)
     {
         var events = aggregate.ClearUncommittedEvents();
         var fileContent = events.Select(JsonConvert.SerializeObject).ToArray();
@@ -63,7 +63,7 @@ public class EventStore(IFileSystem fileSystem) : IEventStore
         return (fileContent, filename);
     }
 
-    private void CreateAggregateFolderIfNotExists<T>() where T : AggregateRoot<AggregateId>
+    private void CreateAggregateFolderIfNotExists()
     {
         if (!_fileSystem.Directory.Exists(typeof(T).Name))
         {
@@ -72,15 +72,16 @@ public class EventStore(IFileSystem fileSystem) : IEventStore
     }
 
 
-    public Task Snapshot<T>(CorrelationId correlationId, T aggregate, CancellationToken cancellationToken = default) where T : AggregateRoot<AggregateId>
+    public Task Snapshot(CorrelationId correlationId, T aggregate, CancellationToken cancellationToken = default)
     {
         if (aggregate.Id is null)
         {
             throw new ArgumentNullException(nameof(aggregate.Id));
         }
-        CreateAggregateFolderIfNotExists<T>();
+        CreateAggregateFolderIfNotExists();
         var (fileContent, filename) = GenerateFileContentFromUncommittedEvents(aggregate);
-        fileContent = [.. fileContent, JsonConvert.SerializeObject(new Snapshot<T>(correlationId, new("System"), aggregate))];
+        fileContent = [.. fileContent, JsonConvert.SerializeObject(new Snapshot<T, TId>(correlationId, new("System"), aggregate))];
         return _fileSystem.File.WriteAllLinesAsync(filename, fileContent, cancellationToken);
     }
+
 }
