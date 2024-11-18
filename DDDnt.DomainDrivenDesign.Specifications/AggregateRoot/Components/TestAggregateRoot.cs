@@ -3,7 +3,7 @@ using DDDnt.DomainDrivenDesign.ValueObjects;
 
 namespace DDDnt.DomainDrivenDesign.Specifications.AggregateRoot.Components;
 
-public class TestAggregateRoot : Aggregate.AggregateRoot<AggregateId>
+public class TestAggregateRoot : AggregateRoot<AggregateId>
 {
     public override DomainEventsDelegates DomainEventsCollection { get; }
 
@@ -22,6 +22,8 @@ public class TestAggregateRoot : Aggregate.AggregateRoot<AggregateId>
         ApplyTestEventCalled = true;
     }
     public override AggregateId? Id { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
+    public void PublicRaiseEvent(IDomainEvent @event) => base.RaiseEvent(@event);
 
 }
 

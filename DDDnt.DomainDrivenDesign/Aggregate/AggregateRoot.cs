@@ -29,7 +29,7 @@ public abstract class AggregateRoot<TId>
         apply.Invoke(@event);
     }
 
-    public virtual void RaiseEvent(IDomainEvent @event)
+    protected virtual void RaiseEvent(IDomainEvent @event)
     {
         _uncommittedEvents.Add(@event);
         ApplyEvent(@event);

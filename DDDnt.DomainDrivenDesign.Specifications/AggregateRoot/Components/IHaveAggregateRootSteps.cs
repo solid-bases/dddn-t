@@ -16,7 +16,7 @@ public interface IHaveAggregateRootSteps : IHaveStepsWithContext<AggregateRootCo
 
     void When_RaiseEvent_is_called()
     {
-        Context.AggregateRoot!.RaiseEvent(Context.Event!);
+        Context.AggregateRoot!.PublicRaiseEvent(Context.Event!);
     }
 
     void Then_the_uncommitted_events_should_contain(IDomainEvent @event)
