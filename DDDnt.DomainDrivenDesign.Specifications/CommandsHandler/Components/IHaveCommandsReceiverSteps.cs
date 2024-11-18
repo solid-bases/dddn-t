@@ -10,11 +10,11 @@ using Moq;
 
 namespace DDDnt.DomainDrivenDesign.Specifications.CommandsHandler.Components;
 
-public interface IHaveCommandsHandlerSteps : IHaveStepsWithContext<CommandsHandlerContext>
+public interface IHaveCommandsReceiverSteps : IHaveStepsWithContext<CommandsHandlerContext>
 {
     void Given_the_logger_mock()
     {
-        Context.LoggerMock = new Mock<ILogger<TestCommandsHandler>>();
+        Context.LoggerMock = new Mock<ILogger<TestCommandsReceiver>>();
     }
 
     void Given_the_ServiceProvider_mock()
@@ -24,7 +24,7 @@ public interface IHaveCommandsHandlerSteps : IHaveStepsWithContext<CommandsHandl
 
     void Given_the_TestCommandHandler()
     {
-        Context.CommandsHandler = new TestCommandsHandler(Context.LoggerMock!.Object, Context.ServiceProviderMock!.Object);
+        Context.CommandsHandler = new TestCommandsReceiver(Context.LoggerMock!.Object, Context.ServiceProviderMock!.Object);
     }
 
     void Given_the_TestCommand()
@@ -42,7 +42,7 @@ public interface IHaveCommandsHandlerSteps : IHaveStepsWithContext<CommandsHandl
         Context.LoggerMock!.Setup(LogInfoExp(level, message));
     }
 
-    Expression<Action<ILogger<TestCommandsHandler>>> LogInfoExp(LogLevel level, string? message = default)
+    Expression<Action<ILogger<TestCommandsReceiver>>> LogInfoExp(LogLevel level, string? message = default)
     {
         return l => l.Log(
                     level,

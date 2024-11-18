@@ -6,18 +6,23 @@ using Microsoft.Extensions.Logging;
 
 namespace DDDnt.DomainDrivenDesign.Command;
 
-public abstract class CommandsHandler : ICommandHandler
+[Obsolete("Use CommandsReceiver instead")]
+public abstract class CommandsHandler(ILogger<CommandsHandler> logger, IServiceProvider serviceProvider) : CommandsReceiver(logger, serviceProvider), ICommandHandler
+{
+}
+
+public abstract class CommandsReceiver : ICommandReceiver
 {
     public abstract required CommandsDelegates Delegates { get; init; }
     public abstract RepositoryCollection RepositoriesTypes { get; }
     public virtual PublisherCollection? PublishersTypes { get; } = [];
 
-    private ILogger<CommandsHandler> Logger { get; }
+    private ILogger<CommandsReceiver> Logger { get; }
 
     private readonly ICollection<IRepository> _repositories = [];
     private readonly ICollection<IPublisher> _publishers = [];
 
-    protected CommandsHandler(ILogger<CommandsHandler> logger, IServiceProvider serviceProvider)
+    protected CommandsReceiver(ILogger<CommandsReceiver> logger, IServiceProvider serviceProvider)
     {
         Logger = logger;
 

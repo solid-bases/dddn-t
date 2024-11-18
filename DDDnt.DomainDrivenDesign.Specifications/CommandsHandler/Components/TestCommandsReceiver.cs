@@ -11,7 +11,7 @@ using Microsoft.Extensions.Logging;
 
 namespace DDDnt.DomainDrivenDesign.Specifications.CommandsHandler.Components;
 
-public class TestCommandsHandler : Command.CommandsHandler
+public class TestCommandsReceiver : Command.CommandsReceiver
 {
     public override required CommandsDelegates Delegates { get; init; }
 
@@ -23,7 +23,7 @@ public class TestCommandsHandler : Command.CommandsHandler
     public override PublisherCollection? PublishersTypes => [typeof(ITestPublisher)];
 
     [SetsRequiredMembers]
-    public TestCommandsHandler(ILogger<TestCommandsHandler> logger, IServiceProvider serviceProvider) : base(logger, serviceProvider)
+    public TestCommandsReceiver(ILogger<TestCommandsReceiver> logger, IServiceProvider serviceProvider) : base(logger, serviceProvider)
     {
         Delegates = new() { { typeof(TestCommand), @event => Execute((TestCommand)@event) } };
     }

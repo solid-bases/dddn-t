@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 
 namespace DDDnt.DomainDrivenDesign.Specifications.CommandsHandler;
 
-public class CommandsHandlerSpec : SpecificationsWithSteps<IHaveCommandsHandlerSteps, CommandsHandlerSteps, CommandsHandlerContext>
+public class CommandsHandlerSpec : SpecificationsWithSteps<IHaveCommandsReceiverSteps, CommandsHandlerSteps, CommandsHandlerContext>
 {
     public CommandsHandlerSpec(CommandsHandlerSteps steps) : base(steps)
     {
