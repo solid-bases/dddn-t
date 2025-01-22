@@ -17,7 +17,7 @@ public abstract class AggregateRoot<TId>
     {
     }
 
-    protected ICollection<IDomainEvent> _uncommittedEvents = [];
+    protected readonly ICollection<IDomainEvent> _uncommittedEvents = [];
 
     internal void ApplyEvent(IDomainEvent @event)
     {
