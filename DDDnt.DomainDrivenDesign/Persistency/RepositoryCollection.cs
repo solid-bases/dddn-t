@@ -1,4 +1,4 @@
-namespace DDDnt.DomainDrivenDesign.Command;
+namespace DDDnt.DomainDrivenDesign.Persistency;
 
 public class RepositoryCollection : List<Type>
 {

@@ -76,7 +76,7 @@ public class EventStore<T, TId>(IFileSystem fileSystem) : IEventStore<T, TId> wh
     {
         if (aggregate.Id is null)
         {
-            throw new ArgumentNullException(nameof(aggregate.Id));
+            throw new ArgumentNullException(nameof(aggregate), "Aggregate ID cannot be null when taking a snapshot.");
         }
         CreateAggregateFolderIfNotExists();
         var (fileContent, filename) = GenerateFileContentFromUncommittedEvents(aggregate);

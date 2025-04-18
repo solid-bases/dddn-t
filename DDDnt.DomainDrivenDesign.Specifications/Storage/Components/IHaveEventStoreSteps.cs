@@ -2,7 +2,6 @@ using System.IO.Abstractions.TestingHelpers;
 
 using DDDnt.DomainDrivenDesign.Aggregate;
 using DDDnt.DomainDrivenDesign.Persistency;
-using DDDnt.DomainDrivenDesign.Specifications.Persistency;
 using DDDnt.DomainDrivenDesign.Specifications.Persistency.Components;
 using DDDnt.DomainDrivenDesign.ValueObjects;
 

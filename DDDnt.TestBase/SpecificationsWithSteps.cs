@@ -19,14 +19,10 @@ namespace DDDnt.TestBase;
 /// The implementation of the container that will be used to inject the steps.<br />
 /// It is disposable in order to be used as a fixture and it reset the context at each usage.
 /// </typeparam>
-public abstract class SpecificationsWithSteps<Steps, StepsImplementation, Context> : IClassFixture<StepsImplementation>
+public abstract class SpecificationsWithSteps<Steps, StepsImplementation, Context>(StepsImplementation steps) : IClassFixture<StepsImplementation>
     where StepsImplementation : class, IDisposable, Steps, new()
     where Steps : class, IHaveStepsWithContext<Context>
     where Context : class, new()
 {
-    protected Steps _steps;
-    protected SpecificationsWithSteps(StepsImplementation steps)
-    {
-        _steps = steps;
-    }
+    protected Steps _steps = steps;
 }

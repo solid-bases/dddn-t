@@ -8,14 +8,9 @@ using Newtonsoft.Json.Linq;
 
 namespace DDDnt.DomainDrivenDesign.Persistency;
 
-public abstract class EventRepository<T, TId> : IEventRepository<T, TId> where TId : AggregateId where T : AggregateRoot<TId>, new()
+public abstract class EventRepository<T, TId>(IEventStore<T, TId> eventStore) : IEventRepository<T, TId> where TId : AggregateId where T : AggregateRoot<TId>, new()
 {
-    private readonly IEventStore<T, TId> _eventStore;
-
-    protected EventRepository(IEventStore<T, TId> eventStore)
-    {
-        _eventStore = eventStore;
-    }
+    private readonly IEventStore<T, TId> _eventStore = eventStore;
 
     public async Task<T> GetByAggregateId(CorrelationId correlationId, TId id, CancellationToken cancellationToken = default)
     {
