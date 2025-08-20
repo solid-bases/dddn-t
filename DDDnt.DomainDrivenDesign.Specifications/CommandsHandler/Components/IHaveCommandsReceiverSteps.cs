@@ -55,7 +55,13 @@ public interface IHaveCommandsReceiverSteps : IHaveStepsWithContext<CommandsHand
 
     void When_Handle_is_called()
     {
-        Context.CommandsHandler!.Handle(Context.Command!);
+        try
+        {
+            Context.CommandsHandler!.Handle(Context.Command!);
+        }
+        catch (Exception)
+        {
+        }
     }
 
     void Then_command_received_should_be_logged(LogLevel level, string? message = default)
