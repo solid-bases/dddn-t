@@ -78,6 +78,7 @@ public abstract class CommandsReceiver : ICommandReceiver
         catch (Exception ex)
         {
             Logger.LogError(ex, "Error executing command: {command}", command);
+            throw;
         }
 
     }
