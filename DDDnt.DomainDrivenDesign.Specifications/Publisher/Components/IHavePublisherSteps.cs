@@ -58,7 +58,13 @@ public interface IHavePublisherSteps : IHaveStepsWithContext<PublisherContext>
 
     void When_Publish_is_called()
     {
-        Context.Publisher!.Publish(Context.AggregateEvent!);
+        try
+        {
+            Context.Publisher!.Publish(Context.AggregateEvent!);
+        }
+        catch (Exception _)
+        {
+        }
     }
 
     void Given_the_TestEvent()

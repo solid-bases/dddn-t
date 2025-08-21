@@ -31,6 +31,7 @@ public abstract class Publisher(ILogger<Publisher> logger) : IPublisher
         catch (Exception ex)
         {
             Logger.LogError(ex, "Error executing event: {@event}", @event);
+            throw;
         }
 
     }
