@@ -18,7 +18,7 @@ namespace DDDnt.DomainDrivenDesign.Specifications.Storage
         {
             _steps.Given_the_aggregate_directory_not_existing();
             _steps.Given_the_store();
-            _steps.Then_the_exception_is_thrown<DirectoryNotFoundException>(_steps.When_ReadAggregate_is_called);
+            _steps.Then_the_exception_is_thrown<AggregateException>(_steps.When_ReadAggregate_is_called);
         }
 
         [Fact]

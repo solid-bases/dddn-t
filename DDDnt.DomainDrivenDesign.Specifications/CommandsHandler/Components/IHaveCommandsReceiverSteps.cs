@@ -81,7 +81,7 @@ public interface IHaveCommandsReceiverSteps : IHaveStepsWithContext<CommandsHand
 
     void Then_Execute_is_called()
     {
-        Context.CommandsHandler!.ExecuteHasBeenCalled.Should().BeTrue();
+        Assert.True(Context.CommandsHandler!.ExecuteHasBeenCalled);
     }
 
     void Given_the_get_required_service_mock()
@@ -100,20 +100,20 @@ public interface IHaveCommandsReceiverSteps : IHaveStepsWithContext<CommandsHand
     void Then_the_repositories_are_injected()
     {
         Context.ServiceProviderMock!.Verify(s => s.GetService(typeof(ITestRepository)), Times.Once());
-        Context.CommandsHandler!.GetRepository<ITestRepository>().Should().BeOfType<TestRepository>();
+        Assert.IsType<TestRepository>(Context.CommandsHandler!.GetRepository<ITestRepository>());
 
         Context.ServiceProviderMock!.Verify(s => s.GetService(typeof(IAnotherTestRepository)), Times.Once());
-        Context.CommandsHandler!.GetRepository<IAnotherTestRepository>().Should().BeOfType<AnotherTestRepository>();
+        Assert.IsType<AnotherTestRepository>(Context.CommandsHandler!.GetRepository<IAnotherTestRepository>());
     }
 
     void Then_the_publishers_are_injected()
     {
         Context.ServiceProviderMock!.Verify(s => s.GetService(typeof(ITestPublisher)), Times.Once());
-        Context.CommandsHandler!.GetPublisher<ITestPublisher>().Should().BeOfType<TestPublisher>();
+        Assert.IsType<TestPublisher>(Context.CommandsHandler!.GetPublisher<ITestPublisher>());
     }
 
     void Then_TestCommandHandler_contains_two_delegates()
     {
-        Context.CommandsHandler!.Delegates.Count.Should().Be(2);
+        Assert.Equal(2, Context.CommandsHandler!.Delegates.Count);
     }
 }

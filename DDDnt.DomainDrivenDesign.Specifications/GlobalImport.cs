@@ -1,3 +1,2 @@
 global using DDDnt.TestBase;
-
-global using FluentAssertions;
+global using Xunit;

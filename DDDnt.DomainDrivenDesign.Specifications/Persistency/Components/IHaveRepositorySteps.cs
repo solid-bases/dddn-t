@@ -37,10 +37,10 @@ public interface IHaveEventRepositorySteps : IHaveStepsWithContext<EventReposito
 
     void Then_the_aggregate_is_initialized()
     {
-        Context.Aggregate!.Should().NotBeNull();
-        Context.Aggregate!.Id!.Value.Should().Be("1");
-        Context.Aggregate!.Description!.Value.Should().Be("Test");
-        Context.Aggregate!.OnlyUpdate!.Value.Should().Be(1);
+        Assert.NotNull(Context.Aggregate);
+        Assert.Equal("1", Context.Aggregate!.Id!.Value);
+        Assert.Equal("Test", Context.Aggregate!.Description!.Value);
+        Assert.Equal(1, Context.Aggregate!.OnlyUpdate!.Value);
     }
 
     void Given_the_Aggregate_with_id(string aggregateId)

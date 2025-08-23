@@ -21,12 +21,12 @@ public interface IHaveAggregateRootSteps : IHaveStepsWithContext<AggregateRootCo
 
     void Then_the_uncommitted_events_should_contain(IDomainEvent @event)
     {
-        Context.AggregateRoot!.ClearUncommittedEvents().Should().Contain(@event);
+        Assert.Contains(@event, Context.AggregateRoot!.ClearUncommittedEvents());
     }
 
     void Then_the_ApplyEvent_method_is_called()
     {
-        Context.AggregateRoot!.ApplyTestEventCalled.Should().BeTrue();
+        Assert.True(Context.AggregateRoot!.ApplyTestEventCalled);
     }
 
     void When_ApplyEvent_is_called()
@@ -36,7 +36,7 @@ public interface IHaveAggregateRootSteps : IHaveStepsWithContext<AggregateRootCo
 
     void Then_the_specific_apply_event_should_be_called()
     {
-        Context.AggregateRoot!.ApplyTestEventCalled.Should().BeTrue();
+        Assert.True(Context.AggregateRoot!.ApplyTestEventCalled);
     }
 
     void Given_the_TestEventWithNoApply()
@@ -46,9 +46,11 @@ public interface IHaveAggregateRootSteps : IHaveStepsWithContext<AggregateRootCo
 
     void Then_the_exception_is_thrown<T>(Action when, string? message = default) where T : Exception
     {
-        when
-            .Should().Throw<T>()
-            .And.Message.Should().Be(message);
+        var exception = Assert.Throws<T>(when);
+        if (message != null)
+        {
+            Assert.Equal(message, exception.Message);
+        }
     }
 
     void Given_RaiseEvent_is_called() => When_RaiseEvent_is_called();
@@ -58,12 +60,11 @@ public interface IHaveAggregateRootSteps : IHaveStepsWithContext<AggregateRootCo
     }
     void Then_the_uncommitted_events_should_be_empty()
     {
-        Context.AggregateRoot!.ClearUncommittedEvents().Should().BeEmpty();
+        Assert.Empty(Context.AggregateRoot!.ClearUncommittedEvents());
     }
     void Then_ClearUncommittedEvents_returns_the_uncommitted_events()
     {
-        Context.UncommittedEvents
-            .Should().NotBeEmpty()
-            .And.Contain(Context.Event!);
+        Assert.NotEmpty(Context.UncommittedEvents!);
+        Assert.Contains(Context.Event!, Context.UncommittedEvents!);
     }
 }

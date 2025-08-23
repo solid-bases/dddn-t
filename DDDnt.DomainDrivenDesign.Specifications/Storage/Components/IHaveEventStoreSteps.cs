@@ -34,10 +34,10 @@ public interface IHaveEventStoreSteps : IHaveStepsWithContext<EventStoreContext>
 
     void Then_the_events_list_is_returned()
     {
-        Context.Events!.Should().NotBeNull();
-        Context.Events!.Count().Should().Be(2);
-        Context.Events![0]!["EventName"]!.ToString().Should().Be(typeof(TestCreateEvent).FullName);
-        Context.Events![1]!["EventName"]!.ToString().Should().Be(typeof(TestUpdateEvent).FullName);
+        Assert.NotNull(Context.Events);
+        Assert.Equal(2, Context.Events!.Count());
+        Assert.Equal(typeof(TestCreateEvent).FullName, Context.Events![0]!["EventName"]!.ToString());
+        Assert.Equal(typeof(TestUpdateEvent).FullName, Context.Events![1]!["EventName"]!.ToString());
     }
 
     void Given_the_aggregate_directory_not_existing()
@@ -48,7 +48,7 @@ public interface IHaveEventStoreSteps : IHaveStepsWithContext<EventStoreContext>
     void Then_the_exception_is_thrown<T>(Func<string, Task> when_ReadAggregate_is_called) where T : Exception
     {
         var act = () => when_ReadAggregate_is_called("1").Wait();
-        act.Should().Throw<T>();
+        Assert.Throws<T>(act);
     }
 
     void Given_the_Aggregate_with_id(string aggregateId)
@@ -63,7 +63,7 @@ public interface IHaveEventStoreSteps : IHaveStepsWithContext<EventStoreContext>
 
     void Then_the_aggregate_is_persisted_in_file()
     {
-        Context.FileSystemMock!.FileExists($@"/{typeof(TestAggregate).Name}/{Context.Aggregate!.Id!.Value}.json").Should().BeTrue();
+        Assert.True(Context.FileSystemMock!.FileExists($@"/{typeof(TestAggregate).Name}/{Context.Aggregate!.Id!.Value}.json"));
     }
 
     void Given_the_aggregate_directory_existing()
@@ -80,9 +80,9 @@ public interface IHaveEventStoreSteps : IHaveStepsWithContext<EventStoreContext>
 
     void Then_the_snapshot_is_persisted()
     {
-        Context.FileSystemMock!.FileExists($@"/{typeof(TestAggregate).Name}/{Context.Aggregate!.Id!.Value}.json").Should().BeTrue();
+        Assert.True(Context.FileSystemMock!.FileExists($@"/{typeof(TestAggregate).Name}/{Context.Aggregate!.Id!.Value}.json"));
         var fileContent = Context.FileSystemMock!.File.ReadAllText($@"/{typeof(TestAggregate).Name}/{Context.Aggregate!.Id!.Value}.json");
-        fileContent.Should().Contain($"\"EventName\":\"Snapshot-{typeof(TestAggregate).Name}\"");
+        Assert.Contains($"\"EventName\":\"Snapshot-{typeof(TestAggregate).Name}\"", fileContent);
     }
 
     void Given_the_TestAggregate_events_with_snapshot()
@@ -100,9 +100,9 @@ public interface IHaveEventStoreSteps : IHaveStepsWithContext<EventStoreContext>
 
     void Then_events_are_read_up_to_snapshot()
     {
-        Context.Events!.Should().NotBeNull();
-        Context.Events!.Count().Should().Be(2);
-        Context.Events![0]!["EventName"]!.ToString().Should().Be($"Snapshot-{typeof(TestAggregate).Name}");
-        Context.Events![1]!["EventName"]!.ToString().Should().Be(typeof(TestUpdateEvent).FullName);
+        Assert.NotNull(Context.Events);
+        Assert.Equal(2, Context.Events!.Count());
+        Assert.Equal($"Snapshot-{typeof(TestAggregate).Name}", Context.Events![0]!["EventName"]!.ToString());
+        Assert.Equal(typeof(TestUpdateEvent).FullName, Context.Events![1]!["EventName"]!.ToString());
     }
 }

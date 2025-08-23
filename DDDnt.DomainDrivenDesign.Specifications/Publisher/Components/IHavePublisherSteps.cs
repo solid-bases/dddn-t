@@ -46,7 +46,7 @@ public interface IHavePublisherSteps : IHaveStepsWithContext<PublisherContext>
 
     void Then_Execute_is_called()
     {
-        Context.Publisher!.ExecuteHasBeenCalled.Should().BeTrue();
+        Assert.True(Context.Publisher!.ExecuteHasBeenCalled);
     }
 
     // void Given_the_get_required_service_mock()
@@ -62,7 +62,7 @@ public interface IHavePublisherSteps : IHaveStepsWithContext<PublisherContext>
         {
             Context.Publisher!.Publish(Context.AggregateEvent!);
         }
-        catch (Exception _)
+        catch (Exception)
         {
         }
     }
@@ -89,6 +89,6 @@ public interface IHavePublisherSteps : IHaveStepsWithContext<PublisherContext>
 
     void Then_Publisher_contains_three_delegates()
     {
-        Context.Publisher!.Delegates.Count.Should().Be(3);
+        Assert.Equal(3, Context.Publisher!.Delegates.Count);
     }
 }
