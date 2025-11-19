@@ -30,9 +30,10 @@ public class TestCommandsReceiver : Command.CommandsReceiver
 
     public bool ExecuteHasBeenCalled { get; private set; } = false;
 
-    public void Execute(TestCommand _)
+    public Task Execute(TestCommand _)
     {
         ExecuteHasBeenCalled = true;
+        return Task.CompletedTask;
     }
 }
 

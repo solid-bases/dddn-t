@@ -61,7 +61,7 @@ public abstract class CommandsReceiver : ICommandReceiver
         Logger.LogInformation("Command received: {command}", command);
         if (Delegates.TryGetValue(command.GetType(), out var execute))
         {
-            TryExecute(command, execute);
+            TryExecute(command, execute).Wait();
         }
         else
         {
@@ -69,11 +69,11 @@ public abstract class CommandsReceiver : ICommandReceiver
         }
     }
 
-    private void TryExecute(ICommand command, ExecuteDelegate execute)
+    private async Task TryExecute(ICommand command, ExecuteDelegate execute)
     {
         try
         {
-            execute(command);
+            await execute(command);
         }
         catch (Exception ex)
         {
