@@ -7,11 +7,11 @@ using DDDnt.DomainDrivenDesign.Specifications.Persistency.Components;
 using DDDnt.DomainDrivenDesign.Storage;
 using DDDnt.DomainDrivenDesign.ValueObjects;
 
-using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace DDDnt.DomainDrivenDesign.Specifications.CommandsHandler.Components;
 
-public class TestCommandsReceiver : Command.CommandsReceiver
+public class TestCommandsReceiver : Command.CommandsReceiver<TestCommandsReceiver>
 {
     public override required CommandsDelegates Delegates { get; init; }
 
@@ -23,7 +23,7 @@ public class TestCommandsReceiver : Command.CommandsReceiver
     public override PublisherCollection? PublishersTypes => [typeof(ITestPublisher)];
 
     [SetsRequiredMembers]
-    public TestCommandsReceiver(ILogger<TestCommandsReceiver> logger, IServiceProvider serviceProvider) : base(logger, serviceProvider)
+    public TestCommandsReceiver(IServiceScopeFactory scopeFactory) : base(scopeFactory)
     {
         Delegates = new() { { typeof(TestCommand), @event => Execute((TestCommand)@event) } };
     }

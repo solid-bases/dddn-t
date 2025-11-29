@@ -11,8 +11,8 @@ public class CommandsHandlerSpec : SpecificationsWithSteps<IHaveCommandsReceiver
         void Background()
         {
             _steps.Given_the_logger_mock();
-            _steps.Given_the_ServiceProvider_mock();
             _steps.Given_the_get_required_service_mock();
+            _steps.Given_the_ServiceProvider_mock();
             _steps.Given_the_TestCommandHandler();
         }
         steps.InitializeContext(Background);

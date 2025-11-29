@@ -4,6 +4,7 @@ using DDDnt.DomainDrivenDesign.Specifications.Persistency.Components;
 using DDDnt.DomainDrivenDesign.Storage;
 using DDDnt.DomainDrivenDesign.ValueObjects;
 
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
 using Moq;
@@ -19,12 +20,23 @@ public interface IHaveCommandsReceiverSteps : IHaveStepsWithContext<CommandsHand
 
     void Given_the_ServiceProvider_mock()
     {
-        Context.ServiceProviderMock = new Mock<IServiceProvider>();
+        var services = Context.Services!;
+        services.AddSingleton(Context.LoggerMock!.Object);
+        var serviceProvider = services.BuildServiceProvider();
+
+        Context.ScopeFactoryMock = new Mock<IServiceScopeFactory>();
+        Context.ServiceProvider = serviceProvider;
+        var scopeMock = new Mock<IServiceScope>();
+        scopeMock.Setup(s => s.ServiceProvider)
+            .Returns(() => Context.ServiceProvider);
+
+        Context.ScopeFactoryMock.Setup(s => s.CreateScope())
+            .Returns(() => scopeMock.Object);
     }
 
     void Given_the_TestCommandHandler()
     {
-        Context.CommandsHandler = new TestCommandsReceiver(Context.LoggerMock!.Object, Context.ServiceProviderMock!.Object);
+        Context.CommandsHandler = new TestCommandsReceiver(Context.ScopeFactoryMock!.Object);
     }
 
     void Given_the_TestCommand()
@@ -86,29 +98,25 @@ public interface IHaveCommandsReceiverSteps : IHaveStepsWithContext<CommandsHand
 
     void Given_the_get_required_service_mock()
     {
-        Context.ServiceProviderMock!
-            .Setup(s => s.GetService(typeof(ITestRepository)))
-            .Returns(new TestRepository(new Mock<IEventStore<TestAggregate, AggregateId>>().Object));
-        Context.ServiceProviderMock!
-            .Setup(s => s.GetService(typeof(IAnotherTestRepository)))
-            .Returns(new AnotherTestRepository(new Mock<IEventStore<TestAggregate, AggregateId>>().Object));
-        Context.ServiceProviderMock!
-            .Setup(s => s.GetService(typeof(ITestPublisher)))
-            .Returns(new TestPublisher());
+        Context.Services = new ServiceCollection();
+        Context.Services!.AddSingleton<ITestRepository, TestRepository>();
+        Context.Services!.AddSingleton<IAnotherTestRepository, AnotherTestRepository>();
+        Context.Services!.AddSingleton<ITestPublisher, TestPublisher>();
+        Context.Services!.AddSingleton(new Mock<IEventStore<TestAggregate, AggregateId>>().Object);
     }
 
     void Then_the_repositories_are_injected()
     {
-        Context.ServiceProviderMock!.Verify(s => s.GetService(typeof(ITestRepository)), Times.Once());
+        // Context.ServiceProvider!.Verify(s => s.GetService(typeof(ITestRepository)), Times.Once());
         Assert.IsType<TestRepository>(Context.CommandsHandler!.GetRepository<ITestRepository>());
 
-        Context.ServiceProviderMock!.Verify(s => s.GetService(typeof(IAnotherTestRepository)), Times.Once());
+        // Context.ServiceProvider!.Verify(s => s.GetService(typeof(IAnotherTestRepository)), Times.Once());
         Assert.IsType<AnotherTestRepository>(Context.CommandsHandler!.GetRepository<IAnotherTestRepository>());
     }
 
     void Then_the_publishers_are_injected()
     {
-        Context.ServiceProviderMock!.Verify(s => s.GetService(typeof(ITestPublisher)), Times.Once());
+        // Context.ServiceProvider!.Verify(s => s.GetService(typeof(ITestPublisher)), Times.Once());
         Assert.IsType<TestPublisher>(Context.CommandsHandler!.GetPublisher<ITestPublisher>());
     }
 

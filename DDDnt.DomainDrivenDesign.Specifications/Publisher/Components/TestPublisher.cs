@@ -39,13 +39,17 @@ public class TestPublisher : PB.Publisher
 
 public record TestEventNoHandler : IIntegrationEvent
 {
+    public required CorrelationId CorrelationId { get; init; }
+    public required User User { get; init; }
 }
 
 public record TestIntegrationEvent : IIntegrationEvent
 {
+    public required CorrelationId CorrelationId { get; init; }
+    public required User User { get; init; }
 }
 
-public record TestDomainEvent(CorrelationId CorrelationId, User User) : IDomainEvent
+public record TestDomainEvent(CorrelationId CorrelationId, User User) : IIntegrationEvent
 {
     public string EventName => "TestDomainEvent";
 }

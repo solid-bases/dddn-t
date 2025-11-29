@@ -7,42 +7,44 @@ using Microsoft.Extensions.Logging;
 namespace DDDnt.DomainDrivenDesign.Command;
 
 [Obsolete("Use CommandsReceiver instead")]
-public abstract class CommandsHandler(ILogger<CommandsHandler> logger, IServiceProvider serviceProvider) : CommandsReceiver(logger, serviceProvider), ICommandHandler
+public abstract class CommandsHandler(IServiceScopeFactory scopeFactory) : CommandsReceiver<CommandsHandler>(scopeFactory), ICommandHandler
 {
 }
 
-public abstract class CommandsReceiver : ICommandReceiver
+public abstract class CommandsReceiver<TLogger> : ICommandReceiver
 {
     public abstract required CommandsDelegates Delegates { get; init; }
     public abstract RepositoryCollection RepositoriesTypes { get; }
     public virtual PublisherCollection? PublishersTypes { get; } = [];
+    protected readonly IServiceProvider _serviceProvider;
 
-    private ILogger<CommandsReceiver> Logger { get; }
+    private ILogger<TLogger> Logger { get; }
 
     private readonly ICollection<IRepository> _repositories = [];
     private readonly ICollection<IPublisher> _publishers = [];
 
-    protected CommandsReceiver(ILogger<CommandsReceiver> logger, IServiceProvider serviceProvider)
+    protected CommandsReceiver(IServiceScopeFactory scopeFactory)
     {
-        Logger = logger;
-
-        InjectRepositories(serviceProvider);
-        InjectPublishers(serviceProvider);
+        var scope = scopeFactory.CreateScope();
+        _serviceProvider = scope.ServiceProvider;
+        Logger = _serviceProvider.GetRequiredService<ILogger<TLogger>>();
+        InjectRepositories();
+        InjectPublishers();
     }
 
-    private void InjectRepositories(IServiceProvider serviceProvider)
+    private void InjectRepositories()
     {
         foreach (var key in RepositoriesTypes)
         {
-            _repositories.Add((IRepository)serviceProvider.GetRequiredService(key));
+            _repositories.Add((IRepository)_serviceProvider.GetRequiredService(key));
         }
     }
 
-    private void InjectPublishers(IServiceProvider serviceProvider)
+    private void InjectPublishers()
     {
         foreach (var key in PublishersTypes ?? [])
         {
-            _publishers.Add((IPublisher)serviceProvider.GetRequiredService(key));
+            _publishers.Add((IPublisher)_serviceProvider.GetRequiredService(key));
         }
     }
 

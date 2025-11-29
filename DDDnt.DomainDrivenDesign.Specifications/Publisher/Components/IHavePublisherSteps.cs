@@ -69,17 +69,29 @@ public interface IHavePublisherSteps : IHaveStepsWithContext<PublisherContext>
 
     void Given_the_TestEvent()
     {
-        Context.AggregateEvent = new TestIntegrationEvent();
+        Context.AggregateEvent = new TestIntegrationEvent
+        {
+            CorrelationId = new(Guid.NewGuid()),
+            User = new("")
+        };
     }
 
     void Given_the_TestPublisherWithException()
     {
-        Context.AggregateEvent = new TestPublisherWithException();
+        Context.AggregateEvent = new TestPublisherWithException
+        {
+            CorrelationId = new(Guid.NewGuid()),
+            User = new("")
+        };
     }
 
     void Given_the_TestPublisherNoHandler()
     {
-        Context.AggregateEvent = new TestPublisherWithException();
+        Context.AggregateEvent = new TestPublisherWithException
+        {
+            CorrelationId = new(Guid.NewGuid()),
+            User = new("")
+        };
     }
 
     void Given_the_TestDomainEvent()
