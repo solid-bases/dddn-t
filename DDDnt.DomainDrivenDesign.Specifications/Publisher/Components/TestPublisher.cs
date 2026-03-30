@@ -1,6 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
 
-using DDDnt.DomainDrivenDesign.Aggregate;
 using DDDnt.DomainDrivenDesign.EventPublisher;
 using DDDnt.DomainDrivenDesign.ValueObjects;
 
